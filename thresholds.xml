@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thresholding-config>
+    <group name="TH-BANDWIDTH-IN-H-100MiBs" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <threshold
+            description="Bandwidth incoming high 100 MiB/s (800 Mbits) rearmed 80 MiB/s (640 MBits)"
+            type="high" ds-type="if" value="1.0E8" rearm="8.0E7"
+            trigger="1" ds-label="ifName"
+            triggeredUEI="uei.opennms.org/threshold/network/bandwidth/in/high/minor/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/network/bandwidth/in/high/minor/rearmed"
+            filterOperator="or" ds-name="ifInOctets"/>
+    </group>
+    <group name="TH-BANDWIDTH-OUT-H-100MiBs" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <threshold
+            description="Bandwidth outgoing high 100 MiB/s (800 Mbits) rearmed 80 MiB/s (640 MBits)"
+            type="high" ds-type="if" value="1.0E8" rearm="8.0E7"
+            trigger="1" ds-label="ifName"
+            triggeredUEI="uei.opennms.org/threshold/network/bandwidth/out/high/minor/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/network/bandwidth/out/high/minor/rearmed"
+            filterOperator="or" ds-name="ifOutOctets"/>
+    </group>
+    <group name="TH-CPU-H-95" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <threshold
+            description="cpu high threshold 95.0 rearmed 90.0 (Windows Single)"
+            type="high" ds-type="sinfCpuInstance" value="95.0"
+            rearm="90.0" trigger="5" ds-label="sinfCpuInstance"
+            triggeredUEI="uei.opennms.org/threshold/windows/cpu/high/major/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/windows/cpu/high/major/rearmed"
+            filterOperator="or" ds-name="sinfCpuPctProcTime">
+            <resource-filter field="sinfCpuInstance">^\d+</resource-filter>
+        </threshold>
+        <threshold
+            description="cpu high threshold 95.0 rearmed 90.0 (Windows Total)"
+            type="high" ds-type="sinfCpuInstance" value="95.0"
+            rearm="90.0" trigger="2" ds-label="sinfCpuInstance"
+            triggeredUEI="uei.opennms.org/threshold/windows/cpu/high/major/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/windows/cpu/high/major/rearmed"
+            filterOperator="or" ds-name="sinfCpuPctProcTime">
+            <resource-filter field="sinfCpuInstance">^_Total</resource-filter>
+        </threshold>
+        <expression
+            description="cpu high threshold 95.0 rearmed 90.0 (Unix Total)"
+            type="high" ds-type="node" value="95.0" rearm="90.0"
+            trigger="2"
+            triggeredUEI="uei.opennms.org/threshold/unix/cpu/high/major/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/unix/cpu/high/major/rearmed"
+            filterOperator="or" expression="(CpuRawUser+CpuRawNice+CpuRawSystem) / (CpuRawUser+CpuRawNice+CpuRawSystem+CpuRawIdle) *100"/>
+    </group>
+    <group name="TH-DISK-H-95" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <expression description="disk usage high 95.0 and rearmed 85.0"
+            type="high" ds-type="hrStorageIndex" value="95.0"
+            rearm="85.0" trigger="1" ds-label="hrStorageDescr"
+            triggeredUEI="uei.opennms.org/threshold/disk/high/major/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/disk/high/major/rearmed"
+            filterOperator="or" expression="hrStorageUsed / hrStorageSize * 100.0">
+            <resource-filter field="hrStorageType">^\.1\.3\.6\.1\.2\.1\.25\.2\.1\.4$</resource-filter>
+        </expression>
+    </group>
+    <group name="TH-MEMORY-H-95-Windows" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <expression
+            description="Memory (RAM) usage high 95.0 and rearmed 85.0 (Windows)"
+            type="high" ds-type="hrStorageIndex" value="95.0"
+            rearm="85.0" trigger="1" ds-label="hrStorageDescr"
+            triggeredUEI="uei.opennms.org/threshold/windows/memory/high/minor/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/windows/memory/high/minor/rearmed"
+            filterOperator="or" expression="hrStorageUsed / hrStorageSize * 100.0">
+            <resource-filter field="hrStorageType">^\.1\.3\.6\.1\.2\.1\.25\.2\.1\.2$</resource-filter>
+        </expression>
+    </group>
+    <group name="TH-MEMORY-H-95-Linux" rrdRepository="/var/lib/opennms/rrd/snmp/">
+        <expression
+            description="Memory (RAM) usage high 95.0 and rearmed 85.0 (Linux)"
+            type="high" ds-type="node" value="95.0" rearm="85.0"
+            trigger="2"
+            triggeredUEI="uei.opennms.org/threshold/linux/memory/high/minor/exceeded"
+            rearmedUEI="uei.opennms.org/threshold/linux/memory/high/minor/rearmed"
+            filterOperator="or" expression="(memTotalReal-memAvailReal-memShared-memBuffer-memCached)/memTotalAvail*100"/>
+    </group>
+</thresholding-config>
